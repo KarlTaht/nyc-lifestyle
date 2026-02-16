@@ -1184,23 +1184,7 @@ function getGrossIncome() {
 }
 
 function onSlider(el) {
-  var sliderName = el.id.replace('slider-', '');
-  var sliderValue = parseFloat(el.value);
-  var grossIncome = getGrossIncome();
-
-  var result = E.computeSliderAmount(sliderName, sliderValue, grossIncome);
-
-  // Update percentage display
-  var pctText = (result.percentage * 100).toFixed(1) + '%';
-  setText('mult-' + sliderName, pctText);
-
-  // Update amount display with frequency
-  var amountEl = $('amount-' + sliderName);
-  if (amountEl) {
-    var freqLabel = FREQ_LABELS[result.displayFreq] || '/yr';
-    amountEl.textContent = E.fmtk(result.displayAmount) + freqLabel;
-  }
-
+  // Just trigger recalculate - it will update all displays
   recalculate();
 }
 
@@ -1210,8 +1194,8 @@ function resetSliders() {
     var name = names[i];
     var slider = $('slider-' + name);
     if (slider) slider.value = 50; // Middle of 0-100 range
-    onSlider(slider); // Update displays
   }
+  recalculate(); // Update all displays once
 }
 
 function updateAllSliderDisplays() {
