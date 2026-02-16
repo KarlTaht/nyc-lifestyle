@@ -69,6 +69,49 @@ const TaxEngine = (function () {
 
   // ── Slider Configuration ──────────────────────────────────
 
+  // Percentage-of-income ranges and display time scales for each category
+  const SLIDER_CONFIG = {
+    housing: {
+      minPct: 0.05,    // 5%
+      maxPct: 0.50,    // 50%
+      displayFreq: 'monthly',
+      label: 'Housing & Home',
+    },
+    food: {
+      minPct: 0.01,    // 1%
+      maxPct: 0.10,    // 10%
+      displayFreq: 'weekly',
+      label: 'Food & Dining',
+    },
+    nightlife: {
+      minPct: 0.005,   // 0.5%
+      maxPct: 0.10,    // 10%
+      displayFreq: 'weekly',
+      label: 'Going Out & Social',
+    },
+    travel: {
+      minPct: 0.01,    // 1%
+      maxPct: 0.20,    // 20%
+      displayFreq: 'annual',
+      label: 'Travel & Experiences',
+    },
+    health: {
+      minPct: 0.001,   // 0.1%
+      maxPct: 0.05,    // 5%
+      displayFreq: 'monthly',
+      label: 'Health & Wellness',
+    },
+    shopping: {
+      minPct: 0.01,    // 1%
+      maxPct: 0.15,    // 15%
+      displayFreq: 'monthly',
+      label: 'Style & Shopping',
+    },
+  };
+
+  // Maps display frequency to annual divisor
+  const FREQ_DIVISORS = { annual: 1, monthly: 12, weekly: 52, daily: 365 };
+
   const SLIDER_MAPPING = {
     housing: [
       { freq: 'monthly', key: 'rent' },
@@ -374,10 +417,59 @@ const TaxEngine = (function () {
 
   // ── Slider Helpers ────────────────────────────────────────
 
+  /**
+   * Convert a 0-100 slider value to percentage within a category's range.
+   * @param {string} sliderName - Category name
+   * @param {number} sliderValue - 0 to 100
+   * @returns {number} Percentage as decimal (e.g., 0.25 for 25%)
+   */
+  function sliderToPercentage(sliderName, sliderValue) {
+    var config = SLIDER_CONFIG[sliderName];
+    if (!config) return 0;
+    // Linear interpolation between min and max
+    var t = sliderValue / 100;
+    return config.minPct + t * (config.maxPct - config.minPct);
+  }
+
+  /**
+   * Convert a percentage back to slider value (0-100).
+   * @param {string} sliderName - Category name
+   * @param {number} pct - Percentage as decimal
+   * @returns {number} Slider value 0-100
+   */
+  function percentageToSlider(sliderName, pct) {
+    var config = SLIDER_CONFIG[sliderName];
+    if (!config) return 50;
+    var t = (pct - config.minPct) / (config.maxPct - config.minPct);
+    return Math.max(0, Math.min(100, t * 100));
+  }
+
+  /**
+   * Compute spending amount from slider position and gross income.
+   * @param {string} sliderName - Category name
+   * @param {number} sliderValue - 0 to 100
+   * @param {number} grossIncome - Annual gross income
+   * @returns {Object} { percentage, annualAmount, displayAmount, displayFreq }
+   */
+  function computeSliderAmount(sliderName, sliderValue, grossIncome) {
+    var config = SLIDER_CONFIG[sliderName];
+    if (!config) return { percentage: 0, annualAmount: 0, displayAmount: 0, displayFreq: 'annual' };
+
+    var pct = sliderToPercentage(sliderName, sliderValue);
+    var annualAmount = grossIncome * pct;
+    var divisor = FREQ_DIVISORS[config.displayFreq] || 1;
+    var displayAmount = annualAmount / divisor;
+
+    return {
+      percentage: pct,
+      annualAmount: annualAmount,
+      displayAmount: displayAmount,
+      displayFreq: config.displayFreq,
+    };
+  }
+
+  // Legacy function kept for compatibility
   function sliderToMultiplier(val) {
-    // val 1-5, center at 3 = 1.0x
-    // Exponential curve: pow(1.8, val-3)
-    // 1 → 0.31x, 2 → 0.56x, 3 → 1.0x, 4 → 1.8x, 5 → 3.24x
     return Math.pow(1.8, val - 3);
   }
 
@@ -393,11 +485,7 @@ const TaxEngine = (function () {
 
   /**
    * Apply a slider multiplier to base spending values and return scaled values.
-   *
-   * @param {string} sliderName
-   * @param {number} multiplier
-   * @param {Object} baseValues - Map of "freq:key" → base number
-   * @returns {Object} { scaledValues: {"freq:key": number}, annualImpact: number }
+   * (Legacy function - kept for compatibility)
    */
   function applySliderMultiplier(sliderName, multiplier, baseValues) {
     var items = SLIDER_MAPPING[sliderName] || [];
@@ -428,7 +516,9 @@ const TaxEngine = (function () {
     NY_STATE: NY_STATE,
     NYC_TAX: NYC_TAX,
     FREQ_TO_ANNUAL: FREQ_TO_ANNUAL,
+    FREQ_DIVISORS: FREQ_DIVISORS,
     SLIDER_MAPPING: SLIDER_MAPPING,
+    SLIDER_CONFIG: SLIDER_CONFIG,
     PRESETS: PRESETS,
 
     // Formatting
@@ -443,7 +533,12 @@ const TaxEngine = (function () {
     computeSpending: computeSpending,
     computeBudget: computeBudget,
 
-    // Sliders
+    // Sliders (new percentage-based)
+    sliderToPercentage: sliderToPercentage,
+    percentageToSlider: percentageToSlider,
+    computeSliderAmount: computeSliderAmount,
+
+    // Sliders (legacy)
     sliderToMultiplier: sliderToMultiplier,
     getSliderForItem: getSliderForItem,
     applySliderMultiplier: applySliderMultiplier,

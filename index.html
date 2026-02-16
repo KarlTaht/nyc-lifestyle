@@ -480,6 +480,54 @@ footer {
   margin-top: -2px;
 }
 
+.slider-amount {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 11px;
+}
+
+/* Spending breakdown by category */
+.spending-cat-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.spending-cat-row:last-child {
+  border-bottom: none;
+}
+
+.cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.cat-name {
+  flex: 1;
+  color: var(--text);
+}
+
+.cat-freq {
+  color: var(--text-muted);
+  margin-right: 16px;
+  font-variant-numeric: tabular-nums;
+  min-width: 80px;
+  text-align: right;
+}
+
+.cat-annual {
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  min-width: 70px;
+  text-align: right;
+}
+
 .slider-group[data-color="blue"] .slider-mult { background: #1a2a3a; color: #6cb8ff; }
 .slider-group[data-color="green"] .slider-mult { background: #1a3028; color: #5cc89a; }
 .slider-group[data-color="purple"] .slider-mult { background: #2a2040; color: #b08cff; }
@@ -555,72 +603,72 @@ footer {
 
   <!-- Lifestyle Priority Sliders -->
   <div class="card full-width" style="margin-bottom: 24px;">
-    <h2><span class="icon">&#9878;</span> Lifestyle Priorities <span style="font-weight: 400; font-size: 12px; color: var(--text-muted); margin-left: 8px;">Drag sliders to scale spending categories</span></h2>
+    <h2><span class="icon">&#9878;</span> Lifestyle Priorities <span style="font-weight: 400; font-size: 12px; color: var(--text-muted); margin-left: 8px;">Set spending as % of gross income</span></h2>
     <div class="sliders-grid">
       <div class="slider-group" data-color="blue" data-slider="housing">
         <div class="slider-label-row">
           <label>Housing &amp; Home</label>
-          <span class="slider-mult" id="mult-housing">1.0x</span>
+          <span class="slider-mult" id="mult-housing">27.5%</span>
         </div>
         <div class="slider-track">
-          <input type="range" min="1" max="5" step="0.1" value="3" id="slider-housing" oninput="onSlider(this)">
+          <input type="range" min="0" max="100" step="1" value="50" id="slider-housing" oninput="onSlider(this)">
         </div>
-        <div class="slider-scale"><span>Minimal</span><span id="impact-housing"></span><span>Luxury</span></div>
+        <div class="slider-scale"><span>5%</span><span class="slider-amount" id="amount-housing"></span><span>50%</span></div>
       </div>
 
       <div class="slider-group" data-color="green" data-slider="food">
         <div class="slider-label-row">
           <label>Food &amp; Dining</label>
-          <span class="slider-mult" id="mult-food">1.0x</span>
+          <span class="slider-mult" id="mult-food">5.5%</span>
         </div>
         <div class="slider-track">
-          <input type="range" min="1" max="5" step="0.1" value="3" id="slider-food" oninput="onSlider(this)">
+          <input type="range" min="0" max="100" step="1" value="50" id="slider-food" oninput="onSlider(this)">
         </div>
-        <div class="slider-scale"><span>Cook at home</span><span id="impact-food"></span><span>Foodie life</span></div>
+        <div class="slider-scale"><span>1%</span><span class="slider-amount" id="amount-food"></span><span>10%</span></div>
       </div>
 
       <div class="slider-group" data-color="purple" data-slider="nightlife">
         <div class="slider-label-row">
           <label>Going Out &amp; Social</label>
-          <span class="slider-mult" id="mult-nightlife">1.0x</span>
+          <span class="slider-mult" id="mult-nightlife">5.3%</span>
         </div>
         <div class="slider-track">
-          <input type="range" min="1" max="5" step="0.1" value="3" id="slider-nightlife" oninput="onSlider(this)">
+          <input type="range" min="0" max="100" step="1" value="50" id="slider-nightlife" oninput="onSlider(this)">
         </div>
-        <div class="slider-scale"><span>Homebody</span><span id="impact-nightlife"></span><span>Scene regular</span></div>
+        <div class="slider-scale"><span>0.5%</span><span class="slider-amount" id="amount-nightlife"></span><span>10%</span></div>
       </div>
 
       <div class="slider-group" data-color="orange" data-slider="travel">
         <div class="slider-label-row">
           <label>Travel &amp; Experiences</label>
-          <span class="slider-mult" id="mult-travel">1.0x</span>
+          <span class="slider-mult" id="mult-travel">10.5%</span>
         </div>
         <div class="slider-track">
-          <input type="range" min="1" max="5" step="0.1" value="3" id="slider-travel" oninput="onSlider(this)">
+          <input type="range" min="0" max="100" step="1" value="50" id="slider-travel" oninput="onSlider(this)">
         </div>
-        <div class="slider-scale"><span>Staycation</span><span id="impact-travel"></span><span>Globetrotter</span></div>
+        <div class="slider-scale"><span>1%</span><span class="slider-amount" id="amount-travel"></span><span>20%</span></div>
       </div>
 
       <div class="slider-group" data-color="red" data-slider="health">
         <div class="slider-label-row">
           <label>Health &amp; Wellness</label>
-          <span class="slider-mult" id="mult-health">1.0x</span>
+          <span class="slider-mult" id="mult-health">2.6%</span>
         </div>
         <div class="slider-track">
-          <input type="range" min="1" max="5" step="0.1" value="3" id="slider-health" oninput="onSlider(this)">
+          <input type="range" min="0" max="100" step="1" value="50" id="slider-health" oninput="onSlider(this)">
         </div>
-        <div class="slider-scale"><span>Basics</span><span id="impact-health"></span><span>Full wellness</span></div>
+        <div class="slider-scale"><span>0.1%</span><span class="slider-amount" id="amount-health"></span><span>5%</span></div>
       </div>
 
       <div class="slider-group" data-color="yellow" data-slider="shopping">
         <div class="slider-label-row">
           <label>Style &amp; Shopping</label>
-          <span class="slider-mult" id="mult-shopping">1.0x</span>
+          <span class="slider-mult" id="mult-shopping">8%</span>
         </div>
         <div class="slider-track">
-          <input type="range" min="1" max="5" step="0.1" value="3" id="slider-shopping" oninput="onSlider(this)">
+          <input type="range" min="0" max="100" step="1" value="50" id="slider-shopping" oninput="onSlider(this)">
         </div>
-        <div class="slider-scale"><span>Thrifty</span><span id="impact-shopping"></span><span>Designer</span></div>
+        <div class="slider-scale"><span>1%</span><span class="slider-amount" id="amount-shopping"></span><span>15%</span></div>
       </div>
     </div>
   </div>
@@ -682,169 +730,11 @@ footer {
         </div>
       </div>
 
-      <!-- Spending -->
+      <!-- Spending by Category (driven by sliders) -->
       <div class="card">
-        <h2><span class="icon">&#128184;</span> Lifestyle Spending</h2>
-
-        <!-- Annual -->
-        <div class="spending-section freq-annual">
-          <div class="spending-header">
-            <h3><span class="freq-badge">ANNUAL</span> Big-Ticket & Annual</h3>
-          </div>
-          <div class="spending-items" id="spend-annual">
-            <div class="spending-item">
-              <label>Vacations</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="vacations" placeholder="5,000" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Flights</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="flights" placeholder="2,000" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Furniture</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="furniture" placeholder="2,000" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Clothing</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="clothing" placeholder="3,000" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Electronics</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="electronics" placeholder="1,500" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Gifts</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="gifts" placeholder="1,500" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Medical/Dental</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="medical" placeholder="1,000" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Tax Prep/CPA</label>
-              <input type="text" inputmode="numeric" data-freq="annual" data-key="taxpro" placeholder="500" oninput="formatAndCalc(this)">
-            </div>
-          </div>
-          <div class="spending-subtotal">Annual total: <span id="subtotal-annual">$0</span></div>
-        </div>
-
-        <!-- Monthly -->
-        <div class="spending-section freq-monthly">
-          <div class="spending-header">
-            <h3><span class="freq-badge">MONTHLY</span> Fixed Monthly</h3>
-          </div>
-          <div class="spending-items" id="spend-monthly">
-            <div class="spending-item">
-              <label>Rent</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="rent" placeholder="3,200" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Utilities</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="utilities" placeholder="150" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Internet</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="internet" placeholder="70" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Phone</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="phone" placeholder="85" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Streaming</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="streaming" placeholder="60" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Gym</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="gym" placeholder="120" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Groceries</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="groceries" placeholder="600" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Laundry/Clean</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="laundry" placeholder="80" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Subscriptions</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="subscriptions" placeholder="50" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Pet Care</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="pet" placeholder="0" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Renters Ins.</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="rentersins" placeholder="30" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Therapy</label>
-              <input type="text" inputmode="numeric" data-freq="monthly" data-key="therapy" placeholder="0" oninput="formatAndCalc(this)">
-            </div>
-          </div>
-          <div class="spending-subtotal">Monthly total: <span id="subtotal-monthly">$0</span> &middot; Annual: <span id="subtotal-monthly-annual">$0</span></div>
-        </div>
-
-        <!-- Weekly -->
-        <div class="spending-section freq-weekly">
-          <div class="spending-header">
-            <h3><span class="freq-badge">WEEKLY</span> Weekly Recurring</h3>
-          </div>
-          <div class="spending-items" id="spend-weekly">
-            <div class="spending-item">
-              <label>Transit/Metro</label>
-              <input type="text" inputmode="numeric" data-freq="weekly" data-key="transit" placeholder="33" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Dining Out</label>
-              <input type="text" inputmode="numeric" data-freq="weekly" data-key="dining" placeholder="150" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Bars/Drinks</label>
-              <input type="text" inputmode="numeric" data-freq="weekly" data-key="bars" placeholder="75" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Entertainment</label>
-              <input type="text" inputmode="numeric" data-freq="weekly" data-key="entertainment" placeholder="50" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Rideshare</label>
-              <input type="text" inputmode="numeric" data-freq="weekly" data-key="rideshare" placeholder="40" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Takeout/Deliv</label>
-              <input type="text" inputmode="numeric" data-freq="weekly" data-key="takeout" placeholder="60" oninput="formatAndCalc(this)">
-            </div>
-          </div>
-          <div class="spending-subtotal">Weekly total: <span id="subtotal-weekly">$0</span> &middot; Annual: <span id="subtotal-weekly-annual">$0</span></div>
-        </div>
-
-        <!-- Daily -->
-        <div class="spending-section freq-daily">
-          <div class="spending-header">
-            <h3><span class="freq-badge">DAILY</span> Daily Habits</h3>
-          </div>
-          <div class="spending-items" id="spend-daily">
-            <div class="spending-item">
-              <label>Coffee</label>
-              <input type="text" inputmode="numeric" data-freq="daily" data-key="coffee" placeholder="6" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Lunch</label>
-              <input type="text" inputmode="numeric" data-freq="daily" data-key="lunch" placeholder="16" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Snacks/Misc</label>
-              <input type="text" inputmode="numeric" data-freq="daily" data-key="snacks" placeholder="5" oninput="formatAndCalc(this)">
-            </div>
-            <div class="spending-item">
-              <label>Tips</label>
-              <input type="text" inputmode="numeric" data-freq="daily" data-key="tips" placeholder="3" oninput="formatAndCalc(this)">
-            </div>
-          </div>
-          <div class="spending-subtotal">Daily total: <span id="subtotal-daily">$0</span> &middot; Annual: <span id="subtotal-daily-annual">$0</span></div>
-        </div>
+        <h2><span class="icon">&#128184;</span> Spending Breakdown</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Adjust the sliders above to change spending allocations</p>
+        <div id="spending-breakdown"></div>
       </div>
     </div>
 
@@ -961,22 +851,7 @@ footer {
           <span>Annual Take-Home</span>
           <span class="val positive" id="r-budget-income">$0</span>
         </div>
-        <div class="result-row indent">
-          <span>Annual Spending</span>
-          <span class="val" id="r-spend-annual-cat">$0</span>
-        </div>
-        <div class="result-row indent">
-          <span>Monthly Spending (&times;12)</span>
-          <span class="val" id="r-spend-monthly-cat">$0</span>
-        </div>
-        <div class="result-row indent">
-          <span>Weekly Spending (&times;52)</span>
-          <span class="val" id="r-spend-weekly-cat">$0</span>
-        </div>
-        <div class="result-row indent">
-          <span>Daily Spending (&times;365)</span>
-          <span class="val" id="r-spend-daily-cat">$0</span>
-        </div>
+        <div id="r-category-breakdown"></div>
         <div class="result-row total">
           <span>Total Annual Spending</span>
           <span class="val negative" id="r-total-spending">$0</span>
@@ -1140,27 +1015,69 @@ function renderTaxBars(t) {
   $('tax-bars').innerHTML = html;
 }
 
-function renderSpendingSubtotals(s) {
-  setText('subtotal-annual', E.fmt(s.annual));
-  setText('subtotal-monthly', E.fmt(s.monthly));
-  setText('subtotal-monthly-annual', E.fmt(s.monthlyAnnual));
-  setText('subtotal-weekly', E.fmt(s.weekly));
-  setText('subtotal-weekly-annual', E.fmt(s.weeklyAnnual));
-  setText('subtotal-daily', E.fmt(s.daily));
-  setText('subtotal-daily-annual', E.fmt(s.dailyAnnual));
+var CATEGORY_COLORS = {
+  housing: '#6cb8ff',
+  food: '#5cc89a',
+  nightlife: '#b08cff',
+  travel: '#e0a050',
+  health: '#e07070',
+  shopping: '#d4c455',
+};
+
+function renderSpendingBreakdown(grossIncome) {
+  var html = '';
+  var names = Object.keys(E.SLIDER_CONFIG);
+
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var config = E.SLIDER_CONFIG[name];
+    var slider = $('slider-' + name);
+    if (!slider) continue;
+
+    var result = E.computeSliderAmount(name, parseFloat(slider.value), grossIncome);
+    var freqLabel = FREQ_LABELS[config.displayFreq] || '/yr';
+    var color = CATEGORY_COLORS[name] || 'var(--text)';
+
+    html += '<div class="spending-cat-row">' +
+      '<span class="cat-dot" style="background:' + color + '"></span>' +
+      '<span class="cat-name">' + config.label + '</span>' +
+      '<span class="cat-freq">' + E.fmt(result.displayAmount) + freqLabel + '</span>' +
+      '<span class="cat-annual">' + E.fmtk(result.annualAmount) + '/yr</span>' +
+      '</div>';
+  }
+
+  $('spending-breakdown').innerHTML = html;
 }
 
-function renderBudgetSummary(budget) {
+function renderCategoryBreakdown(grossIncome) {
+  var html = '';
+  var names = Object.keys(E.SLIDER_CONFIG);
+
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var config = E.SLIDER_CONFIG[name];
+    var slider = $('slider-' + name);
+    if (!slider) continue;
+
+    var result = E.computeSliderAmount(name, parseFloat(slider.value), grossIncome);
+
+    html += '<div class="result-row indent">' +
+      '<span>' + config.label + '</span>' +
+      '<span class="val">' + E.fmt(-result.annualAmount) + '</span>' +
+      '</div>';
+  }
+
+  $('r-category-breakdown').innerHTML = html;
+}
+
+function renderBudgetSummary(budget, grossIncome) {
   var t = budget.taxes;
   var s = budget.spending;
   var remainder = budget.remainder;
   var savingsRate = budget.savingsRate;
 
   setText('r-budget-income', E.fmt(t.takeHome));
-  setText('r-spend-annual-cat', E.fmt(s.annual));
-  setText('r-spend-monthly-cat', E.fmt(s.monthlyAnnual));
-  setText('r-spend-weekly-cat', E.fmt(s.weeklyAnnual));
-  setText('r-spend-daily-cat', E.fmt(s.dailyAnnual));
+  renderCategoryBreakdown(grossIncome);
   setText('r-total-spending', E.fmt(-s.totalAnnual));
 
   setText('r-remainder', E.fmt(remainder));
@@ -1188,14 +1105,58 @@ function renderBudgetSummary(budget) {
 
 // ── Main Orchestrator ───────────────────────────────────────
 
+function gatherSliderSpending(grossIncome) {
+  // Compute spending from percentage-of-income sliders
+  var sliderSpending = { annual: 0, monthly: 0, weekly: 0, daily: 0 };
+  var names = Object.keys(E.SLIDER_CONFIG);
+
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var slider = $('slider-' + name);
+    if (!slider) continue;
+
+    var sliderValue = parseFloat(slider.value);
+    var result = E.computeSliderAmount(name, sliderValue, grossIncome);
+    var config = E.SLIDER_CONFIG[name];
+
+    // Add to the appropriate frequency bucket
+    if (config.displayFreq === 'annual') {
+      sliderSpending.annual += result.annualAmount;
+    } else if (config.displayFreq === 'monthly') {
+      sliderSpending.monthly += result.annualAmount / 12;
+    } else if (config.displayFreq === 'weekly') {
+      sliderSpending.weekly += result.annualAmount / 52;
+    } else if (config.displayFreq === 'daily') {
+      sliderSpending.daily += result.annualAmount / 365;
+    }
+  }
+
+  return sliderSpending;
+}
+
 function recalculate() {
   var inputs = gatherInputs();
-  var spending = gatherSpending();
+  var grossIncome = inputs.salary + inputs.bonus + inputs.otherIncome;
+
+  // Compute slider-based spending
+  var sliderSpend = gatherSliderSpending(grossIncome);
+
+  // Build spending object for computeBudget
+  var spending = {
+    annual: { sliderTotal: sliderSpend.annual },
+    monthly: { sliderTotal: sliderSpend.monthly },
+    weekly: { sliderTotal: sliderSpend.weekly },
+    daily: { sliderTotal: sliderSpend.daily },
+  };
+
   var budget = E.computeBudget(inputs, spending);
 
   renderTaxResults(budget.taxes);
-  renderSpendingSubtotals(budget.spending);
-  renderBudgetSummary(budget);
+  renderSpendingBreakdown(grossIncome);
+  renderBudgetSummary(budget, grossIncome);
+
+  // Update slider displays when income changes
+  updateAllSliderDisplays();
 }
 
 // ── Input Formatting ────────────────────────────────────────
@@ -1210,84 +1171,106 @@ function formatAndCalc(el) {
     el.value = parts.join('.');
   }
 
-  // Update slider base value if this is a spending input at 1.0x
-  if (el.dataset && el.dataset.freq && el.dataset.key) {
-    var k = el.dataset.freq + ':' + el.dataset.key;
-    var v = E.parseInputValue(el.value);
-    var sliderName = E.getSliderForItem(el.dataset.freq, el.dataset.key);
-    if (sliderName) {
-      var slider = $('slider-' + sliderName);
-      if (slider && parseFloat(slider.value) === 3) {
-        baseSpendingValues[k] = v;
-      }
-    } else {
-      baseSpendingValues[k] = v;
-    }
-    updateSliderImpacts();
-  }
-
   recalculate();
 }
 
 // ── Slider DOM Logic ────────────────────────────────────────
 
 var baseSpendingValues = {};
+var FREQ_LABELS = { annual: '/yr', monthly: '/mo', weekly: '/wk', daily: '/day' };
+
+function getGrossIncome() {
+  return readField('salary') + readField('bonus') + readField('otherIncome');
+}
 
 function onSlider(el) {
   var sliderName = el.id.replace('slider-', '');
-  var mult = E.sliderToMultiplier(parseFloat(el.value));
+  var sliderValue = parseFloat(el.value);
+  var grossIncome = getGrossIncome();
 
-  setText('mult-' + sliderName, mult.toFixed(1) + 'x');
+  var result = E.computeSliderAmount(sliderName, sliderValue, grossIncome);
 
-  var result = E.applySliderMultiplier(sliderName, mult, baseSpendingValues);
+  // Update percentage display
+  var pctText = (result.percentage * 100).toFixed(1) + '%';
+  setText('mult-' + sliderName, pctText);
 
-  // Write scaled values back to spending inputs
-  for (var baseKey in result.scaledValues) {
-    var parts = baseKey.split(':');
-    var inp = document.querySelector('input[data-freq="' + parts[0] + '"][data-key="' + parts[1] + '"]');
-    if (inp) inp.value = result.scaledValues[baseKey].toLocaleString();
+  // Update amount display with frequency
+  var amountEl = $('amount-' + sliderName);
+  if (amountEl) {
+    var freqLabel = FREQ_LABELS[result.displayFreq] || '/yr';
+    amountEl.textContent = E.fmtk(result.displayAmount) + freqLabel;
   }
-
-  var impactEl = $('impact-' + sliderName);
-  if (impactEl) impactEl.textContent = E.fmtk(result.annualImpact) + '/yr';
 
   recalculate();
 }
 
 function resetSliders() {
-  var names = Object.keys(E.SLIDER_MAPPING);
+  var names = Object.keys(E.SLIDER_CONFIG);
   for (var i = 0; i < names.length; i++) {
     var name = names[i];
     var slider = $('slider-' + name);
-    if (slider) slider.value = 3;
-    var mult = $('mult-' + name);
-    if (mult) mult.textContent = '1.0x';
-    var impact = $('impact-' + name);
-    if (impact) impact.textContent = '';
+    if (slider) slider.value = 50; // Middle of 0-100 range
+    onSlider(slider); // Update displays
   }
 }
 
-function updateSliderImpacts() {
-  var names = Object.keys(E.SLIDER_MAPPING);
+function updateAllSliderDisplays() {
+  var names = Object.keys(E.SLIDER_CONFIG);
+  var grossIncome = getGrossIncome();
+
   for (var i = 0; i < names.length; i++) {
     var name = names[i];
-    var items = E.SLIDER_MAPPING[name];
-    var annualImpact = 0;
-    for (var j = 0; j < items.length; j++) {
-      var inp = document.querySelector(
-        'input[data-freq="' + items[j].freq + '"][data-key="' + items[j].key + '"]'
-      );
-      if (!inp) continue;
-      annualImpact += E.parseInputValue(inp.value) * (E.FREQ_TO_ANNUAL[items[j].freq] || 1);
-    }
-    var impactEl = $('impact-' + name);
-    if (impactEl) {
-      impactEl.textContent = annualImpact > 0 ? E.fmtk(annualImpact) + '/yr' : '';
+    var slider = $('slider-' + name);
+    if (!slider) continue;
+
+    var sliderValue = parseFloat(slider.value);
+    var result = E.computeSliderAmount(name, sliderValue, grossIncome);
+
+    // Update percentage display
+    setText('mult-' + name, (result.percentage * 100).toFixed(1) + '%');
+
+    // Update amount display
+    var amountEl = $('amount-' + name);
+    if (amountEl) {
+      var freqLabel = FREQ_LABELS[result.displayFreq] || '/yr';
+      amountEl.textContent = E.fmtk(result.displayAmount) + freqLabel;
     }
   }
 }
 
 // ── Preset Application ──────────────────────────────────────
+
+function computePresetSliderPositions(preset) {
+  // Calculate what percentage of gross income each category represents
+  var gross = preset.salary + preset.bonus + preset.otherIncome;
+  if (gross === 0) return {};
+
+  var categoryTotals = {};
+  var names = Object.keys(E.SLIDER_CONFIG);
+
+  // Sum up spending per slider category
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var items = E.SLIDER_MAPPING[name] || [];
+    var total = 0;
+    for (var j = 0; j < items.length; j++) {
+      var freq = items[j].freq;
+      var key = items[j].key;
+      var val = (preset.spending[freq] && preset.spending[freq][key]) || 0;
+      total += val * (E.FREQ_TO_ANNUAL[freq] || 1);
+    }
+    categoryTotals[name] = total;
+  }
+
+  // Convert totals to slider positions
+  var sliderPositions = {};
+  for (var name in categoryTotals) {
+    var pct = categoryTotals[name] / gross;
+    sliderPositions[name] = E.percentageToSlider(name, pct);
+  }
+
+  return sliderPositions;
+}
 
 function applyPreset(name, btnEl) {
   var p = E.PRESETS[name];
@@ -1304,29 +1287,26 @@ function applyPreset(name, btnEl) {
   setField('hsa', p.hsa);
   setField('otherDeductions', p.otherDeductions);
 
-  // Set spending inputs and capture base values
-  baseSpendingValues = {};
-  var freqs = Object.keys(p.spending);
-  for (var i = 0; i < freqs.length; i++) {
-    var freq = freqs[i];
-    var keys = Object.keys(p.spending[freq]);
-    for (var j = 0; j < keys.length; j++) {
-      var key = keys[j];
-      var val = p.spending[freq][key];
-      var inp = document.querySelector('input[data-freq="' + freq + '"][data-key="' + key + '"]');
-      if (inp) inp.value = val.toLocaleString();
-      baseSpendingValues[freq + ':' + key] = val;
+  // Compute slider positions from preset spending
+  var sliderPositions = computePresetSliderPositions(p);
+  var sliderNames = Object.keys(E.SLIDER_CONFIG);
+  for (var i = 0; i < sliderNames.length; i++) {
+    var sliderName = sliderNames[i];
+    var slider = $('slider-' + sliderName);
+    if (slider && sliderPositions[sliderName] !== undefined) {
+      slider.value = sliderPositions[sliderName];
     }
   }
 
-  resetSliders();
-  updateSliderImpacts();
   recalculate();
 }
 
 // ── Init ────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', recalculate);
+document.addEventListener('DOMContentLoaded', function() {
+  // Apply a default preset to initialize reasonable values
+  applyPreset('mid', document.querySelector('.preset-btn:nth-child(2)'));
+});
 </script>
 </body>
 </html>
