@@ -290,8 +290,22 @@ header p {
 .summary-bar {
   margin-top: 24px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+}
+
+.summary-section-label {
+  grid-column: 1 / -1;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  padding-left: 4px;
+}
+
+.summary-section-label:first-child {
+  margin-top: 0;
 }
 
 @media (max-width: 600px) {
@@ -436,8 +450,8 @@ footer {
 
 .slider-label-row .slider-base {
   font-size: 11px;
-  color: var(--text);
-  opacity: 0.75;
+  font-weight: 600;
+  color: #fff;
   font-variant-numeric: tabular-nums;
 }
 
@@ -700,7 +714,7 @@ footer {
 
       <div class="slider-group" data-color="purple" data-slider="nightlife">
         <div class="slider-label-row">
-          <label>Going Out &amp; Social</label>
+          <label>Entertainment &amp; Hobbies</label>
           <span class="slider-pcts"><span class="slider-mult" id="mult-nightlife">5.3%</span> <span class="slider-base" id="base-nightlife">gross</span></span>
         </div>
         <div class="slider-track">
@@ -815,10 +829,12 @@ footer {
       <div class="card" style="margin-bottom: 24px;">
         <h2><span class="icon">&#9889;</span> At a Glance</h2>
         <div class="summary-bar">
+          <!-- Row 1: Money Flow -->
+          <div class="summary-section-label">Annual</div>
           <div class="summary-stat">
             <div class="label">Gross</div>
             <div class="value neutral" id="s-gross">$0</div>
-            <div class="sub">annual</div>
+            <div class="sub">income</div>
           </div>
           <div class="summary-stat">
             <div class="label">Taxes + Ded.</div>
@@ -826,14 +842,44 @@ footer {
             <div class="sub" id="s-tax-pct">0%</div>
           </div>
           <div class="summary-stat">
-            <div class="label">Spending</div>
-            <div class="value" style="color: var(--orange);" id="s-spending">$0</div>
-            <div class="sub" id="s-spend-pct">0%</div>
+            <div class="label">Take-Home</div>
+            <div class="value" style="color: var(--green);" id="s-takehome">$0</div>
+            <div class="sub" id="s-takehome-pct">0%</div>
+          </div>
+
+          <!-- Row 2: Allocation -->
+          <div class="summary-stat">
+            <div class="label">Housing</div>
+            <div class="value" style="color: #6cb8ff;" id="s-housing">$0</div>
+            <div class="sub" id="s-housing-pct">0%</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label">Discretionary</div>
+            <div class="value" style="color: var(--orange);" id="s-discretionary">$0</div>
+            <div class="sub" id="s-discretionary-pct">0%</div>
           </div>
           <div class="summary-stat">
             <div class="label">Savings</div>
             <div class="value" id="s-savings">$0</div>
             <div class="sub" id="s-save-pct">0%</div>
+          </div>
+
+          <!-- Row 3: Monthly -->
+          <div class="summary-section-label">Monthly</div>
+          <div class="summary-stat">
+            <div class="label">Take-Home</div>
+            <div class="value" style="color: var(--green);" id="s-mo-takehome">$0</div>
+            <div class="sub">/month</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label">Spending</div>
+            <div class="value" style="color: var(--orange);" id="s-mo-spend">$0</div>
+            <div class="sub">/month</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label">Savings</div>
+            <div class="value" id="s-mo-savings">$0</div>
+            <div class="sub">/month</div>
           </div>
         </div>
       </div>
@@ -1038,12 +1084,12 @@ function renderTaxResults(t) {
 
   // Take-home
   setText('r-takehome-annual', E.fmt(t.takeHome));
-  setText('r-takehome-monthly', E.fmt(t.takeHome / 12));
 
-  // Biweekly paycheck from salary only (pre-tax deductions come from paychecks)
+  // Salary-only take-home (excludes bonuses/RSUs, pre-tax deductions come from paychecks)
   var salaryAfterPreTax = t.salary - t.totalPreTax;
   var netRate = t.gross > 0 ? (1 - t.effectiveRate) : 1;
   var salaryTakeHome = salaryAfterPreTax * netRate;
+  setText('r-takehome-monthly', E.fmt(salaryTakeHome / 12));
   setText('r-takehome-biweekly', E.fmt(salaryTakeHome / 26));
 
   // Cash bonuses (after taxes)
@@ -1159,15 +1205,40 @@ function renderBudgetSummary(budget, grossIncome) {
   srEl.textContent = E.pct(savingsRate);
   srEl.className = 'val ' + (savingsRate >= 0.2 ? 'positive' : savingsRate >= 0 ? 'accent' : 'negative');
 
-  // At a glance
+  // At a glance - Row 1: Money Flow
   setText('s-gross', E.fmtk(t.gross));
   setText('s-taxes', E.fmtk(t.totalDeductions));
   setText('s-tax-pct', t.gross > 0 ? E.pct(t.totalDeductions / t.gross) + ' of gross' : '0%');
-  setText('s-spending', E.fmtk(s.totalAnnual));
-  setText('s-spend-pct', t.takeHome > 0 ? E.pct(s.totalAnnual / t.takeHome) + ' of net' : '0%');
+  setText('s-takehome', E.fmtk(t.takeHome));
+  setText('s-takehome-pct', t.gross > 0 ? E.pct(t.takeHome / t.gross) + ' of gross' : '0%');
+
+  // At a glance - Row 2: Allocation
+  var housingSlider = $('slider-housing');
+  var housingAmount = housingSlider ? E.computeSliderAmount('housing', parseFloat(housingSlider.value), grossIncome).annualAmount : 0;
+  var discretionary = s.totalAnnual - housingAmount;
+
+  setText('s-housing', E.fmtk(housingAmount));
+  setText('s-housing-pct', t.takeHome > 0 ? E.pct(housingAmount / t.takeHome) + ' of net' : '0%');
+  setText('s-discretionary', E.fmtk(discretionary));
+  setText('s-discretionary-pct', t.takeHome > 0 ? E.pct(discretionary / t.takeHome) + ' of net' : '0%');
   setText('s-savings', E.fmtk(remainder));
   $('s-savings').className = 'value ' + (remainder >= 0 ? 'surplus' : 'deficit');
   setText('s-save-pct', t.takeHome > 0 ? E.pct(remainder / t.takeHome) + ' of net' : '0%');
+
+  // At a glance - Row 3: Monthly (salary only, excludes travel)
+  var salaryAfterPreTax = t.salary - t.totalPreTax;
+  var netRate = t.gross > 0 ? (1 - t.effectiveRate) : 1;
+  var salaryTakeHome = salaryAfterPreTax * netRate;
+
+  var travelSlider = $('slider-travel');
+  var travelAmount = travelSlider ? E.computeSliderAmount('travel', parseFloat(travelSlider.value), grossIncome).annualAmount : 0;
+  var monthlySpending = (s.totalAnnual - travelAmount) / 12;
+  var monthlySalarySavings = (salaryTakeHome / 12) - monthlySpending;
+
+  setText('s-mo-takehome', E.fmt(salaryTakeHome / 12));
+  setText('s-mo-spend', E.fmt(monthlySpending));
+  setText('s-mo-savings', E.fmt(monthlySalarySavings));
+  $('s-mo-savings').className = 'value ' + (monthlySalarySavings >= 0 ? 'surplus' : 'deficit');
 }
 
 // ── Main Orchestrator ───────────────────────────────────────
@@ -1347,6 +1418,7 @@ function applyPreset(name, btnEl) {
   setField('insurance', p.insurance);
   setField('hsa', p.hsa);
   setField('otherDeductions', p.otherDeductions);
+  $('filingStatus').value = 'married';
 
   // Compute slider positions from preset spending
   var sliderPositions = computePresetSliderPositions(p);

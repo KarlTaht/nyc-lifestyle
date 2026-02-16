@@ -87,7 +87,7 @@ const TaxEngine = (function () {
       minPct: 0.005,   // 0.5%
       maxPct: 0.10,    // 10%
       displayFreq: 'weekly',
-      label: 'Going Out & Social',
+      label: 'Entertainment & Hobbies',
     },
     travel: {
       minPct: 0.01,    // 1%
