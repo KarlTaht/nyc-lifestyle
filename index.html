@@ -562,24 +562,41 @@ footer {
 .slider-group[data-color="red"] input[type="range"]::-moz-range-thumb { background: #e07070; box-shadow: 0 0 0 1px #994040; }
 .slider-group[data-color="yellow"] input[type="range"]::-moz-range-thumb { background: #d4c455; box-shadow: 0 0 0 1px #998a30; }
 
-/* Preset buttons */
-.presets {
-  display: flex;
+/* Preset matrix */
+.preset-matrix {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr;
   gap: 8px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  align-items: center;
+}
+
+.preset-header {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.preset-row-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  padding-right: 8px;
 }
 
 .preset-btn {
-  padding: 6px 14px;
+  padding: 8px 12px;
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 8px;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.15s;
   font-family: inherit;
+  text-align: center;
 }
 
 .preset-btn:hover {
@@ -606,13 +623,26 @@ footer {
     <!-- Presets -->
     <div class="card">
       <h2><span class="icon">&#9881;</span> Quick Presets</h2>
-      <div class="presets">
-        <button class="preset-btn" onclick="applyPreset('junior', this)">Junior ($150K)</button>
-        <button class="preset-btn" onclick="applyPreset('mid', this)">Mid-Level ($225K)</button>
-        <button class="preset-btn" onclick="applyPreset('senior', this)">Senior ($350K)</button>
-        <button class="preset-btn" onclick="applyPreset('staff', this)">Staff/Principal ($500K)</button>
-        <button class="preset-btn" onclick="applyPreset('director', this)">Director ($750K)</button>
-        <button class="preset-btn" onclick="applyPreset('exec', this)">Executive ($1.2M)</button>
+      <div class="preset-matrix">
+        <div class="preset-header"></div>
+        <div class="preset-header">Senior</div>
+        <div class="preset-header">Staff</div>
+        <div class="preset-header">Principal</div>
+
+        <div class="preset-row-label">Big Tech</div>
+        <button class="preset-btn" onclick="applyPreset('bigtech_senior', this)">$417K</button>
+        <button class="preset-btn" onclick="applyPreset('bigtech_staff', this)">$620K</button>
+        <button class="preset-btn" onclick="applyPreset('bigtech_principal', this)">$1.15M</button>
+
+        <div class="preset-row-label">Quant</div>
+        <button class="preset-btn" onclick="applyPreset('quant_senior', this)">$350K</button>
+        <button class="preset-btn" onclick="applyPreset('quant_staff', this)">$575K</button>
+        <button class="preset-btn" onclick="applyPreset('quant_principal', this)">$900K</button>
+
+        <div class="preset-row-label">Research</div>
+        <button class="preset-btn" onclick="applyPreset('research_senior', this)">$450K</button>
+        <button class="preset-btn" onclick="applyPreset('research_staff', this)">$750K</button>
+        <button class="preset-btn" onclick="applyPreset('research_principal', this)">$1M</button>
       </div>
     </div>
 
@@ -1336,7 +1366,7 @@ function applyPreset(name, btnEl) {
 
 document.addEventListener('DOMContentLoaded', function() {
   // Apply a default preset to initialize reasonable values
-  applyPreset('mid', document.querySelector('.preset-btn:nth-child(2)'));
+  applyPreset('bigtech_senior', document.querySelector('.preset-btn:first-of-type'));
 });
 </script>
 </body>

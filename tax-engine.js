@@ -153,66 +153,105 @@ const TaxEngine = (function () {
   };
 
   // ── Presets ────────────────────────────────────────────────
+  // Matrix: Rows = Role Type, Columns = Seniority Level
+  // Big Tech: Meta levels.fyi (RSU reduced 25%)
+  // Quant: User-provided values
+  // Research: OpenAI/Anthropic based estimates
 
   const PRESETS = {
-    junior: {
-      salary: 140000, bonus: 10000, otherIncome: 0,
-      retirement: 10000, insurance: 2400, hsa: 0, otherDeductions: 0,
-      spending: {
-        annual: { vacations: 3000, flights: 1000, furniture: 500, clothing: 1500, electronics: 800, gifts: 500, medical: 500, taxpro: 0 },
-        monthly: { rent: 2200, utilities: 100, internet: 60, phone: 85, streaming: 35, gym: 50, groceries: 450, laundry: 60, subscriptions: 20, pet: 0, rentersins: 25, therapy: 0 },
-        weekly: { transit: 33, dining: 80, bars: 40, entertainment: 30, rideshare: 20, takeout: 40 },
-        daily: { coffee: 5, lunch: 14, snacks: 3, tips: 2 },
-      },
-    },
-    mid: {
-      salary: 190000, bonus: 35000, otherIncome: 0,
-      retirement: 23500, insurance: 3000, hsa: 0, otherDeductions: 0,
-      spending: {
-        annual: { vacations: 5000, flights: 2000, furniture: 1500, clothing: 2500, electronics: 1200, gifts: 1000, medical: 800, taxpro: 300 },
-        monthly: { rent: 2800, utilities: 130, internet: 70, phone: 85, streaming: 50, gym: 100, groceries: 550, laundry: 70, subscriptions: 40, pet: 0, rentersins: 30, therapy: 0 },
-        weekly: { transit: 33, dining: 120, bars: 60, entertainment: 40, rideshare: 35, takeout: 50 },
-        daily: { coffee: 6, lunch: 16, snacks: 4, tips: 3 },
-      },
-    },
-    senior: {
-      salary: 280000, bonus: 70000, otherIncome: 0,
+    // Big Tech (Meta E5/E6/E7, RSU -25%)
+    bigtech_senior: {
+      salary: 216000, bonus: 31000, otherIncome: 170000,
       retirement: 23500, insurance: 3600, hsa: 4150, otherDeductions: 0,
       spending: {
         annual: { vacations: 8000, flights: 3000, furniture: 2500, clothing: 4000, electronics: 2000, gifts: 2000, medical: 1000, taxpro: 500 },
-        monthly: { rent: 3500, utilities: 150, internet: 70, phone: 85, streaming: 60, gym: 150, groceries: 650, laundry: 80, subscriptions: 60, pet: 100, rentersins: 30, therapy: 200 },
-        weekly: { transit: 33, dining: 180, bars: 80, entertainment: 60, rideshare: 50, takeout: 70 },
+        monthly: { rent: 3500, utilities: 150, internet: 70, phone: 85, streaming: 60, gym: 150, groceries: 650, laundry: 80, subscriptions: 60, pet: 0, rentersins: 30, therapy: 0 },
+        weekly: { transit: 33, dining: 150, bars: 70, entertainment: 50, rideshare: 40, takeout: 60 },
         daily: { coffee: 7, lunch: 18, snacks: 5, tips: 4 },
       },
     },
-    staff: {
-      salary: 350000, bonus: 150000, otherIncome: 0,
+    bigtech_staff: {
+      salary: 256000, bonus: 52000, otherIncome: 312000,
       retirement: 23500, insurance: 3600, hsa: 4150, otherDeductions: 1200,
       spending: {
         annual: { vacations: 15000, flights: 5000, furniture: 4000, clothing: 6000, electronics: 3000, gifts: 3000, medical: 1500, taxpro: 1000 },
-        monthly: { rent: 4500, utilities: 180, internet: 80, phone: 100, streaming: 70, gym: 200, groceries: 800, laundry: 100, subscriptions: 80, pet: 150, rentersins: 35, therapy: 300 },
-        weekly: { transit: 33, dining: 250, bars: 100, entertainment: 80, rideshare: 80, takeout: 100 },
+        monthly: { rent: 4500, utilities: 180, internet: 80, phone: 100, streaming: 70, gym: 200, groceries: 800, laundry: 100, subscriptions: 80, pet: 0, rentersins: 35, therapy: 200 },
+        weekly: { transit: 33, dining: 200, bars: 100, entertainment: 80, rideshare: 70, takeout: 80 },
         daily: { coffee: 8, lunch: 20, snacks: 6, tips: 5 },
       },
     },
-    director: {
-      salary: 500000, bonus: 250000, otherIncome: 0,
+    bigtech_principal: {
+      salary: 300000, bonus: 100000, otherIncome: 750000,
       retirement: 23500, insurance: 4800, hsa: 4150, otherDeductions: 3600,
       spending: {
-        annual: { vacations: 25000, flights: 8000, furniture: 5000, clothing: 8000, electronics: 4000, gifts: 5000, medical: 2000, taxpro: 2000 },
-        monthly: { rent: 6000, utilities: 200, internet: 100, phone: 120, streaming: 80, gym: 250, groceries: 1000, laundry: 120, subscriptions: 100, pet: 200, rentersins: 40, therapy: 400 },
-        weekly: { transit: 0, dining: 350, bars: 150, entertainment: 120, rideshare: 150, takeout: 120 },
+        annual: { vacations: 30000, flights: 10000, furniture: 6000, clothing: 10000, electronics: 5000, gifts: 6000, medical: 2000, taxpro: 3000 },
+        monthly: { rent: 6500, utilities: 220, internet: 100, phone: 120, streaming: 80, gym: 300, groceries: 1200, laundry: 120, subscriptions: 120, pet: 0, rentersins: 45, therapy: 400 },
+        weekly: { transit: 0, dining: 350, bars: 150, entertainment: 120, rideshare: 120, takeout: 120 },
         daily: { coffee: 10, lunch: 25, snacks: 8, tips: 7 },
       },
     },
-    exec: {
-      salary: 700000, bonus: 500000, otherIncome: 0,
-      retirement: 23500, insurance: 6000, hsa: 4150, otherDeductions: 6000,
+
+    // Quant (user-provided values)
+    quant_senior: {
+      salary: 250000, bonus: 100000, otherIncome: 0,
+      retirement: 23500, insurance: 3600, hsa: 4150, otherDeductions: 0,
       spending: {
-        annual: { vacations: 40000, flights: 15000, furniture: 8000, clothing: 12000, electronics: 5000, gifts: 8000, medical: 3000, taxpro: 5000 },
-        monthly: { rent: 8500, utilities: 250, internet: 120, phone: 150, streaming: 100, gym: 350, groceries: 1400, laundry: 150, subscriptions: 150, pet: 300, rentersins: 50, therapy: 500 },
-        weekly: { transit: 0, dining: 500, bars: 200, entertainment: 200, rideshare: 250, takeout: 150 },
-        daily: { coffee: 12, lunch: 30, snacks: 10, tips: 10 },
+        annual: { vacations: 10000, flights: 4000, furniture: 3000, clothing: 5000, electronics: 2500, gifts: 2500, medical: 1200, taxpro: 800 },
+        monthly: { rent: 4000, utilities: 160, internet: 80, phone: 100, streaming: 60, gym: 180, groceries: 700, laundry: 90, subscriptions: 70, pet: 0, rentersins: 35, therapy: 0 },
+        weekly: { transit: 33, dining: 180, bars: 90, entertainment: 60, rideshare: 50, takeout: 70 },
+        daily: { coffee: 8, lunch: 20, snacks: 5, tips: 5 },
+      },
+    },
+    quant_staff: {
+      salary: 275000, bonus: 300000, otherIncome: 0,
+      retirement: 23500, insurance: 3600, hsa: 4150, otherDeductions: 1200,
+      spending: {
+        annual: { vacations: 18000, flights: 6000, furniture: 5000, clothing: 8000, electronics: 4000, gifts: 4000, medical: 1500, taxpro: 1500 },
+        monthly: { rent: 5000, utilities: 200, internet: 100, phone: 120, streaming: 80, gym: 250, groceries: 900, laundry: 110, subscriptions: 100, pet: 0, rentersins: 40, therapy: 300 },
+        weekly: { transit: 0, dining: 280, bars: 130, entertainment: 100, rideshare: 100, takeout: 100 },
+        daily: { coffee: 10, lunch: 25, snacks: 7, tips: 6 },
+      },
+    },
+    quant_principal: {
+      salary: 300000, bonus: 600000, otherIncome: 0,
+      retirement: 23500, insurance: 4800, hsa: 4150, otherDeductions: 3600,
+      spending: {
+        annual: { vacations: 35000, flights: 12000, furniture: 8000, clothing: 12000, electronics: 6000, gifts: 8000, medical: 2500, taxpro: 4000 },
+        monthly: { rent: 7000, utilities: 250, internet: 120, phone: 150, streaming: 100, gym: 350, groceries: 1300, laundry: 140, subscriptions: 150, pet: 0, rentersins: 50, therapy: 500 },
+        weekly: { transit: 0, dining: 400, bars: 180, entertainment: 150, rideshare: 150, takeout: 140 },
+        daily: { coffee: 12, lunch: 30, snacks: 10, tips: 8 },
+      },
+    },
+
+    // Research (OpenAI/Anthropic based)
+    research_senior: {
+      salary: 200000, bonus: 50000, otherIncome: 200000,
+      retirement: 23500, insurance: 3600, hsa: 4150, otherDeductions: 0,
+      spending: {
+        annual: { vacations: 8000, flights: 3000, furniture: 2500, clothing: 4000, electronics: 2500, gifts: 2000, medical: 1000, taxpro: 500 },
+        monthly: { rent: 3800, utilities: 150, internet: 80, phone: 100, streaming: 60, gym: 150, groceries: 650, laundry: 80, subscriptions: 80, pet: 0, rentersins: 30, therapy: 0 },
+        weekly: { transit: 33, dining: 150, bars: 60, entertainment: 50, rideshare: 40, takeout: 60 },
+        daily: { coffee: 7, lunch: 18, snacks: 5, tips: 4 },
+      },
+    },
+    research_staff: {
+      salary: 250000, bonus: 100000, otherIncome: 400000,
+      retirement: 23500, insurance: 3600, hsa: 4150, otherDeductions: 1200,
+      spending: {
+        annual: { vacations: 15000, flights: 5000, furniture: 4000, clothing: 6000, electronics: 4000, gifts: 3500, medical: 1500, taxpro: 1200 },
+        monthly: { rent: 5000, utilities: 180, internet: 100, phone: 120, streaming: 80, gym: 220, groceries: 850, laundry: 100, subscriptions: 100, pet: 0, rentersins: 40, therapy: 250 },
+        weekly: { transit: 33, dining: 220, bars: 100, entertainment: 80, rideshare: 70, takeout: 90 },
+        daily: { coffee: 9, lunch: 22, snacks: 6, tips: 5 },
+      },
+    },
+    research_principal: {
+      salary: 300000, bonus: 150000, otherIncome: 550000,
+      retirement: 23500, insurance: 4800, hsa: 4150, otherDeductions: 3600,
+      spending: {
+        annual: { vacations: 25000, flights: 8000, furniture: 6000, clothing: 10000, electronics: 5000, gifts: 5000, medical: 2000, taxpro: 2500 },
+        monthly: { rent: 6000, utilities: 220, internet: 120, phone: 140, streaming: 100, gym: 300, groceries: 1100, laundry: 130, subscriptions: 140, pet: 0, rentersins: 45, therapy: 400 },
+        weekly: { transit: 0, dining: 320, bars: 140, entertainment: 120, rideshare: 110, takeout: 110 },
+        daily: { coffee: 10, lunch: 26, snacks: 8, tips: 7 },
       },
     },
   };
