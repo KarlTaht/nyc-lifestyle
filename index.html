@@ -420,11 +420,24 @@ footer {
   gap: 6px;
 }
 
+.slider-pcts {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 .slider-label-row .slider-mult {
   font-size: 12px;
   font-weight: 600;
   padding: 1px 8px;
   border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.slider-label-row .slider-base {
+  font-size: 11px;
+  color: var(--text);
+  opacity: 0.75;
   font-variant-numeric: tabular-nums;
 }
 
@@ -588,27 +601,55 @@ footer {
     <p>Federal + NY State + NYC taxes | 2024 brackets | Take-home pay & lifestyle budget planner</p>
   </header>
 
-  <!-- Presets -->
-  <div class="card full-width" style="margin-bottom: 24px;">
-    <h2><span class="icon">&#9881;</span> Quick Presets</h2>
-    <div class="presets">
-      <button class="preset-btn" onclick="applyPreset('junior', this)">Junior ($150K)</button>
-      <button class="preset-btn" onclick="applyPreset('mid', this)">Mid-Level ($225K)</button>
-      <button class="preset-btn" onclick="applyPreset('senior', this)">Senior ($350K)</button>
-      <button class="preset-btn" onclick="applyPreset('staff', this)">Staff/Principal ($500K)</button>
-      <button class="preset-btn" onclick="applyPreset('director', this)">Director ($750K)</button>
-      <button class="preset-btn" onclick="applyPreset('exec', this)">Executive ($1.2M)</button>
+  <!-- Top Row: Presets + Take-Home -->
+  <div class="grid" style="margin-bottom: 24px;">
+    <!-- Presets -->
+    <div class="card">
+      <h2><span class="icon">&#9881;</span> Quick Presets</h2>
+      <div class="presets">
+        <button class="preset-btn" onclick="applyPreset('junior', this)">Junior ($150K)</button>
+        <button class="preset-btn" onclick="applyPreset('mid', this)">Mid-Level ($225K)</button>
+        <button class="preset-btn" onclick="applyPreset('senior', this)">Senior ($350K)</button>
+        <button class="preset-btn" onclick="applyPreset('staff', this)">Staff/Principal ($500K)</button>
+        <button class="preset-btn" onclick="applyPreset('director', this)">Director ($750K)</button>
+        <button class="preset-btn" onclick="applyPreset('exec', this)">Executive ($1.2M)</button>
+      </div>
+    </div>
+
+    <!-- Take-Home -->
+    <div class="card">
+      <h2><span class="icon">&#127968;</span> Take-Home Pay</h2>
+      <div class="result-row total" style="border-top: none; margin-top: 0; padding-top: 0;">
+        <span>Annual Take-Home</span>
+        <span class="val positive" id="r-takehome-annual">$0</span>
+      </div>
+      <div class="result-row">
+        <span>Monthly Take-Home</span>
+        <span class="val positive" id="r-takehome-monthly">$0</span>
+      </div>
+      <div class="result-row">
+        <span>Biweekly Paycheck</span>
+        <span class="val" id="r-takehome-biweekly">$0</span>
+      </div>
+      <div class="result-row" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);">
+        <span>Cash Bonuses</span>
+        <span class="val" id="r-takehome-bonus">$0</span>
+      </div>
+      <div class="result-row">
+        <span>Additional Income</span>
+        <span class="val" id="r-takehome-other">$0</span>
+      </div>
     </div>
   </div>
 
   <!-- Lifestyle Priority Sliders -->
   <div class="card full-width" style="margin-bottom: 24px;">
-    <h2><span class="icon">&#9878;</span> Lifestyle Priorities <span style="font-weight: 400; font-size: 12px; color: var(--text-muted); margin-left: 8px;">Set spending as % of gross income</span></h2>
+    <h2><span class="icon">&#9878;</span> Lifestyle Priorities <span style="font-weight: 400; font-size: 12px; color: var(--text-muted); margin-left: 8px;">Set spending as % of income</span></h2>
     <div class="sliders-grid">
       <div class="slider-group" data-color="blue" data-slider="housing">
         <div class="slider-label-row">
           <label>Housing &amp; Home</label>
-          <span class="slider-mult" id="mult-housing">27.5%</span>
+          <span class="slider-pcts"><span class="slider-mult" id="mult-housing">27.5%</span> <span class="slider-base" id="base-housing">gross</span></span>
         </div>
         <div class="slider-track">
           <input type="range" min="0" max="100" step="1" value="50" id="slider-housing" oninput="onSlider(this)">
@@ -619,7 +660,7 @@ footer {
       <div class="slider-group" data-color="green" data-slider="food">
         <div class="slider-label-row">
           <label>Food &amp; Dining</label>
-          <span class="slider-mult" id="mult-food">5.5%</span>
+          <span class="slider-pcts"><span class="slider-mult" id="mult-food">5.5%</span> <span class="slider-base" id="base-food">gross</span></span>
         </div>
         <div class="slider-track">
           <input type="range" min="0" max="100" step="1" value="50" id="slider-food" oninput="onSlider(this)">
@@ -630,7 +671,7 @@ footer {
       <div class="slider-group" data-color="purple" data-slider="nightlife">
         <div class="slider-label-row">
           <label>Going Out &amp; Social</label>
-          <span class="slider-mult" id="mult-nightlife">5.3%</span>
+          <span class="slider-pcts"><span class="slider-mult" id="mult-nightlife">5.3%</span> <span class="slider-base" id="base-nightlife">gross</span></span>
         </div>
         <div class="slider-track">
           <input type="range" min="0" max="100" step="1" value="50" id="slider-nightlife" oninput="onSlider(this)">
@@ -641,7 +682,7 @@ footer {
       <div class="slider-group" data-color="orange" data-slider="travel">
         <div class="slider-label-row">
           <label>Travel &amp; Experiences</label>
-          <span class="slider-mult" id="mult-travel">10.5%</span>
+          <span class="slider-pcts"><span class="slider-mult" id="mult-travel">10.5%</span> <span class="slider-base" id="base-travel">gross</span></span>
         </div>
         <div class="slider-track">
           <input type="range" min="0" max="100" step="1" value="50" id="slider-travel" oninput="onSlider(this)">
@@ -652,7 +693,7 @@ footer {
       <div class="slider-group" data-color="red" data-slider="health">
         <div class="slider-label-row">
           <label>Health &amp; Wellness</label>
-          <span class="slider-mult" id="mult-health">2.6%</span>
+          <span class="slider-pcts"><span class="slider-mult" id="mult-health">2.6%</span> <span class="slider-base" id="base-health">gross</span></span>
         </div>
         <div class="slider-track">
           <input type="range" min="0" max="100" step="1" value="50" id="slider-health" oninput="onSlider(this)">
@@ -663,7 +704,7 @@ footer {
       <div class="slider-group" data-color="yellow" data-slider="shopping">
         <div class="slider-label-row">
           <label>Style &amp; Shopping</label>
-          <span class="slider-mult" id="mult-shopping">8%</span>
+          <span class="slider-pcts"><span class="slider-mult" id="mult-shopping">8%</span> <span class="slider-base" id="base-shopping">gross</span></span>
         </div>
         <div class="slider-track">
           <input type="range" min="0" max="100" step="1" value="50" id="slider-shopping" oninput="onSlider(this)">
@@ -740,8 +781,61 @@ footer {
 
     <!-- RIGHT COLUMN: Results -->
     <div>
-      <!-- Tax Breakdown -->
+      <!-- At a Glance -->
       <div class="card" style="margin-bottom: 24px;">
+        <h2><span class="icon">&#9889;</span> At a Glance</h2>
+        <div class="summary-bar">
+          <div class="summary-stat">
+            <div class="label">Gross</div>
+            <div class="value neutral" id="s-gross">$0</div>
+            <div class="sub">annual</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label">Taxes + Ded.</div>
+            <div class="value" style="color: var(--red);" id="s-taxes">$0</div>
+            <div class="sub" id="s-tax-pct">0%</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label">Spending</div>
+            <div class="value" style="color: var(--orange);" id="s-spending">$0</div>
+            <div class="sub" id="s-spend-pct">0%</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label">Savings</div>
+            <div class="value" id="s-savings">$0</div>
+            <div class="sub" id="s-save-pct">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget Summary -->
+      <div class="card" style="margin-bottom: 24px;">
+        <h2><span class="icon">&#128202;</span> Budget Summary</h2>
+        <div class="result-row">
+          <span>Annual Take-Home</span>
+          <span class="val positive" id="r-budget-income">$0</span>
+        </div>
+        <div id="r-category-breakdown"></div>
+        <div class="result-row total">
+          <span>Total Annual Spending</span>
+          <span class="val negative" id="r-total-spending">$0</span>
+        </div>
+        <div class="result-row total" style="border-top: 2px solid var(--green);">
+          <span id="r-remainder-label">Annual Savings</span>
+          <span class="val" id="r-remainder">$0</span>
+        </div>
+        <div class="result-row">
+          <span id="r-remainder-mo-label">Monthly Savings</span>
+          <span class="val" id="r-remainder-mo">$0</span>
+        </div>
+        <div class="result-row" style="margin-top: 8px;">
+          <span>Savings Rate</span>
+          <span class="val" id="r-savings-rate">0%</span>
+        </div>
+      </div>
+
+      <!-- Tax Breakdown -->
+      <div class="card">
         <h2><span class="icon">&#128200;</span> Tax Breakdown</h2>
 
         <div class="result-group">
@@ -825,76 +919,6 @@ footer {
 
         <!-- Visual bar chart of deductions -->
         <div class="bar-chart" id="tax-bars"></div>
-      </div>
-
-      <!-- Take-Home -->
-      <div class="card" style="margin-bottom: 24px;">
-        <h2><span class="icon">&#127968;</span> Take-Home Pay</h2>
-        <div class="result-row total" style="border-top: none; margin-top: 0; padding-top: 0;">
-          <span>Annual Take-Home</span>
-          <span class="val positive" id="r-takehome-annual">$0</span>
-        </div>
-        <div class="result-row">
-          <span>Monthly Take-Home</span>
-          <span class="val positive" id="r-takehome-monthly">$0</span>
-        </div>
-        <div class="result-row">
-          <span>Biweekly Paycheck</span>
-          <span class="val" id="r-takehome-biweekly">$0</span>
-        </div>
-      </div>
-
-      <!-- Budget Summary -->
-      <div class="card" style="margin-bottom: 24px;">
-        <h2><span class="icon">&#128202;</span> Budget Summary</h2>
-        <div class="result-row">
-          <span>Annual Take-Home</span>
-          <span class="val positive" id="r-budget-income">$0</span>
-        </div>
-        <div id="r-category-breakdown"></div>
-        <div class="result-row total">
-          <span>Total Annual Spending</span>
-          <span class="val negative" id="r-total-spending">$0</span>
-        </div>
-        <div class="result-row total" style="border-top: 2px solid var(--green);">
-          <span id="r-remainder-label">Annual Savings</span>
-          <span class="val" id="r-remainder">$0</span>
-        </div>
-        <div class="result-row">
-          <span id="r-remainder-mo-label">Monthly Savings</span>
-          <span class="val" id="r-remainder-mo">$0</span>
-        </div>
-        <div class="result-row" style="margin-top: 8px;">
-          <span>Savings Rate</span>
-          <span class="val" id="r-savings-rate">0%</span>
-        </div>
-      </div>
-
-      <!-- Summary Stats -->
-      <div class="card">
-        <h2><span class="icon">&#9889;</span> At a Glance</h2>
-        <div class="summary-bar">
-          <div class="summary-stat">
-            <div class="label">Gross</div>
-            <div class="value neutral" id="s-gross">$0</div>
-            <div class="sub">annual</div>
-          </div>
-          <div class="summary-stat">
-            <div class="label">Taxes + Ded.</div>
-            <div class="value" style="color: var(--red);" id="s-taxes">$0</div>
-            <div class="sub" id="s-tax-pct">0%</div>
-          </div>
-          <div class="summary-stat">
-            <div class="label">Spending</div>
-            <div class="value" style="color: var(--orange);" id="s-spending">$0</div>
-            <div class="sub" id="s-spend-pct">0%</div>
-          </div>
-          <div class="summary-stat">
-            <div class="label">Savings</div>
-            <div class="value" id="s-savings">$0</div>
-            <div class="sub" id="s-save-pct">0%</div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -985,7 +1009,20 @@ function renderTaxResults(t) {
   // Take-home
   setText('r-takehome-annual', E.fmt(t.takeHome));
   setText('r-takehome-monthly', E.fmt(t.takeHome / 12));
-  setText('r-takehome-biweekly', E.fmt(t.takeHome / 26));
+
+  // Biweekly paycheck from salary only (pre-tax deductions come from paychecks)
+  var salaryAfterPreTax = t.salary - t.totalPreTax;
+  var netRate = t.gross > 0 ? (1 - t.effectiveRate) : 1;
+  var salaryTakeHome = salaryAfterPreTax * netRate;
+  setText('r-takehome-biweekly', E.fmt(salaryTakeHome / 26));
+
+  // Cash bonuses (after taxes)
+  var bonusTakeHome = t.bonus * netRate;
+  setText('r-takehome-bonus', E.fmt(bonusTakeHome));
+
+  // Additional income (RSUs, investments, side income)
+  var otherTakeHome = t.otherIncome * netRate;
+  setText('r-takehome-other', E.fmt(otherTakeHome));
 
   // Tax bar chart
   renderTaxBars(t);
@@ -1201,6 +1238,7 @@ function resetSliders() {
 function updateAllSliderDisplays() {
   var names = Object.keys(E.SLIDER_CONFIG);
   var grossIncome = getGrossIncome();
+  var baseSalary = readField('salary');
 
   for (var i = 0; i < names.length; i++) {
     var name = names[i];
@@ -1210,8 +1248,17 @@ function updateAllSliderDisplays() {
     var sliderValue = parseFloat(slider.value);
     var result = E.computeSliderAmount(name, sliderValue, grossIncome);
 
-    // Update percentage display
+    // Update percentage of gross display
     setText('mult-' + name, (result.percentage * 100).toFixed(1) + '%');
+
+    // Update percentage of base salary display
+    var baseEl = $('base-' + name);
+    if (baseEl && baseSalary > 0) {
+      var basePct = (result.annualAmount / baseSalary) * 100;
+      baseEl.textContent = '(' + basePct.toFixed(1) + '% base)';
+    } else if (baseEl) {
+      baseEl.textContent = 'gross';
+    }
 
     // Update amount display
     var amountEl = $('amount-' + name);
